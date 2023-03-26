@@ -1,7 +1,5 @@
 # Portal
-<div align=center>
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/logo.png" style="width:120px;height:120px; " >
-</div>
+<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot8.png" style="transform:scale(0.7)" >
 
 
 Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程中。
