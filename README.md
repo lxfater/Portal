@@ -16,33 +16,26 @@ Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程�
 # 特性
 
 ## 免费接入（实验性功能）
-
-<div style="display:flex;justify-content: center;margin-bottom:20px;">
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot12.png" style="width:70%; >
-</div>
-
+<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot12.png" style="transform:scale(0.7)" >
 
 
 用户可以通过ChatGPTweb免费使用，无需购买API Key，支持API和ChatGPTweb连接方式，用户可以根据自己的需求选择适合自己的方式。
 ## 自定义提示语模板
-<div style="display:flex;justify-content: center;margin-bottom:20px;">
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot10.png" style="width:70%; >
-</div>
+<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot10.png" style="transform:scale(0.7)" >
+
+
 客户端支持自定义和导入上千种提示语模板，方便用户选择常用的提示语。
 
 ## 快捷键绑定特定模板
-<div style="display:flex;justify-content: center;margin-bottom:20px;">
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot11.png" style="width:70%; >
-</div>
+<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot11.png" style="transform:scale(0.7)" >
 ![快捷键绑定特定模板]()
 
 
 通过配置快捷键，用户可以将选择的文字发送到特定的提示语模板，并返回到光标处或者复制到剪切板，让软件无缝嵌入到多种应用中。
 
 ## 对话管理 && 对话图生成
-<div style="display:flex;justify-content: center;margin-bottom:20px;">
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot9.png" style="width:70%; >
-</div>
+
+<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot9.png" style="transform:scale(0.7)" >
 
 支持多对话切换，方便用户管理多个对话。
 
@@ -52,11 +45,11 @@ Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程�
 
 ## window
 
-Releases处下载安装即可。
+release处下载安装即可。
 
 ## mac
 
-Releases处下载安装即可，需要解除安全限制。
+release处下载安装即可，需要解除安全限制。
 
 
 # License
