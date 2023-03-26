@@ -45,11 +45,11 @@ Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程�
 
 ## window
 
-release处下载安装即可。
+releases处下载安装即可。
 
 ## mac
 
-release处下载安装即可，需要解除安全限制。
+releases处下载安装即可，需要解除安全限制,开启屏幕录制和辅助权限。
 
 
 # License
