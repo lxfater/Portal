@@ -1,5 +1,5 @@
 # Portal
-<div style="display:flex;justify-content: center;margin-bottom:20px;">
+<div align=center>
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/logo.png" style="width:120px;height:120px; " >
 </div>
 
