@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot8.png" style="transform:scale(0.7)" >
 
 
-Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程中。
+Portal是一款传输工具，旨在将ChatGPT的能力整合到用户的工作流程中。
 
 具体来说，它实现了ChatGPTweb免费接入和API接入方式，让用户可以自由选择适合自己的接入方式。
 
@@ -26,7 +26,6 @@ Portal是一款工具，旨在将ChatGPT的能力整合到用户的工作流程�
 
 ## 快捷键绑定特定模板
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot11.png" style="transform:scale(0.7)" >
-![快捷键绑定特定模板]()
 
 
 通过配置快捷键，用户可以将选择的文字发送到特定的提示语模板，并返回到光标处或者复制到剪切板，让软件无缝嵌入到多种应用中。
