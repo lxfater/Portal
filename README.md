@@ -52,6 +52,10 @@ releases处下载安装即可，需要解除安全限制,开启屏幕录制和�
 
 <a href="https://www.bilibili.com/video/BV1Eh411V7wL/?vd_source=246776eb028c0472258dfba9f3913fef">B站录制的使用教程</a>
 
+# tg测试群
+
+https://t.me/+71JuyMJsgSIzZWE1
+
 # License
 
 [LICENSE](./LICENSE)
