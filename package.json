@@ -3,7 +3,9 @@
   "description": "Your best AI portal",
   "version": "1.0.10",
   "private": true,
-  "author": {},
+  "author": {
+    "email": "lxfater@gmail.com"
+  },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
     "rebuild": "electron-rebuild -f -w electron",

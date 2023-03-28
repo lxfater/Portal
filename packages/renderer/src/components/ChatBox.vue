@@ -12,7 +12,7 @@ import {
   Delete,
   Compass,
 } from '@element-plus/icons-vue';
-import ChatEditor from './chatEditor.vue';
+import ChatEditor from './ChatEditor.vue';
 import ChatMap from './ChatMap.vue';
 import type { ChatItem, Prompt } from '../../../types';
 const timeline = ref();
