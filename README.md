@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot8.png" style="transform:scale(0.7)" >
 
 
-Portal是一款传输工具，旨在将ChatGPT的能力整合到用户的工作流程中。
+Portal是一款跨平台工具，旨在将ChatGPT的能力整合到用户的工作流程中。
 
 具体来说，他可以将任何选择的文本通过快捷键发送到ChatGPT，进行处理，然后返回到用户的剪切板，或者在光标处返回（实现打字机效果）。这意味着你可以在大部分没有接入ChatGPT能力的应用立即获得ChatGPT的加持。
 
