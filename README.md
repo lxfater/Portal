@@ -4,7 +4,21 @@
 
 Portal是一款传输工具，旨在将ChatGPT的能力整合到用户的工作流程中。
 
-具体来说，它实现了ChatGPTweb免费接入和API接入方式，让用户可以自由选择适合自己的接入方式。
+具体来说，他可以将任何选择的文本通过快捷键发送到ChatGPT，进行处理，然后返回到用户的剪切板，或者在光标处返回（实现打字机效果）。这意味着它可以接入大部分没有接入ChatGPT能力的应用。
+
+这么说可能有点抽象了，点击下面B站的视频，花上几分钟观看实际的应用效果
+
+[微信应用：猫娘嘴替](https://www.bilibili.com/video/BV1Eh411V7wL/?share_source=copy_web&vd_source=20bfa77787adcf9ac929a8997bc1f024&t=306)
+
+[文本编辑器应用：文案生成器](https://www.bilibili.com/video/BV1Eh411V7wL/?share_source=copy_web&vd_source=20bfa77787adcf9ac929a8997bc1f024&t=382)
+
+[网页应用：文本翻译器](https://www.bilibili.com/video/BV1Eh411V7wL/?share_source=copy_web&vd_source=20bfa77787adcf9ac929a8997bc1f024&t=491)
+
+
+加入您不懂如何配置的话，上面的视频就是详细的用户手册，假如您还是不懂如何使用的，加入我们的tg群，大家一起交流。
+
+
+它实现了ChatGPTweb免费接入和API接入方式，让用户可以自由选择适合自己的接入方式。
 
 此外，Portal还支持上千种模板导入和创建，并且可以将这些模板绑定到快捷键中，使用户能够在日常工作中快速调用常用的话语。
 
