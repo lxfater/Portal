@@ -274,7 +274,8 @@ const clearChat = async (id: number) => {
         show-word-limit
         :rows="5"
         type="textarea"
-        :placeholder="store.currentPrompt?.placeholder || '请输入你的问题'"
+        :placeholder="store.currentPrompt?.placeholder || '请输入你的问题，按 Ctrl-Enter 发送'"
+        @keyup.ctrl.enter="onChat"
       />
     </div>
     <div class="card">
