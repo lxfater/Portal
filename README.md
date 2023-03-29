@@ -72,5 +72,6 @@ https://t.me/+71JuyMJsgSIzZWE1
 
 # License
 
-[LICENSE](./LICENSE)
+<a href="https://github.com/lxfater/Portal/blob/main/License"><img src="https://img.shields.io/badge/license-Portal-brightgreen" /></a>
+
 
