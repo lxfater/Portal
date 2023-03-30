@@ -56,11 +56,11 @@ Portal是一款跨平台工具，旨在将ChatGPT的能力整合到用户的工�
 
 ## window
 
-releases处下载安装即可。
+[releases](https://github.com/lxfater/Portal/releases) 处下载安装即可。
 
 ## mac
 
-releases处下载安装即可，需要解除安全限制,开启屏幕录制和辅助权限。
+[releases](https://github.com/lxfater/Portal/releases)  处下载安装即可，需要解除安全限制,开启屏幕录制和辅助权限。
 
 # 使用教程
 
