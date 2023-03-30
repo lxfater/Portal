@@ -12,7 +12,7 @@ export function getSetting(): Promise<Settings> {
     return ipcRenderer.invoke('getSetting');
 }
 window.addEventListener('DOMContentLoaded', async () => {
-    // Title bar implemenation
+    // Title bar implementation
     new Titlebar({
         backgroundColor: TitlebarColor.fromHex('#409eff'),
         minimizable: true,
