@@ -1,6 +1,6 @@
 # 使用须知
 
-<span style="font-size:20px;color:red;">由于chatgpt无法注册新账号，安全性未知的chatgptweb方式强烈不推荐使用，使用者请自己评估风险，再此告知。</span>
+## 由于chatgpt无法注册新账号，安全性未知的chatgptweb方式强烈不推荐使用，使用者请自己评估风险，在此告知。
 # Portal
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot8.png" style="transform:scale(0.7)" >
 
@@ -29,12 +29,6 @@ Portal是一款跨平台工具，旨在将ChatGPT的能力整合到用户的工�
 
 总的来说，Portal是一个功能强大的工具，能够帮助用户更好地利用ChatGPT的能力，并将其整合到自己的工作流程中。
 # 特性
-
-## 免费接入（实验性功能）
-<img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot12.png" style="transform:scale(0.7)" >
-
-
-用户可以通过ChatGPTweb免费使用，无需购买API Key，支持API和ChatGPTweb连接方式，用户可以根据自己的需求选择适合自己的方式。
 ## 自定义提示语模板
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot10.png" style="transform:scale(0.7)" >
 
@@ -55,6 +49,9 @@ Portal是一款跨平台工具，旨在将ChatGPT的能力整合到用户的工�
 
 高亮文字右键创建对话连接，客户端可以生成对话图，可以在对话图中快速浏览，方便用户进行对话分析和管理。
 
+## 接入
+
+支持使用apikey接入，不在对chatgptweb接入提供维护（强烈不推荐使用chatgptweb接入，希望用户迁移到apikey接入方式）
 # 安装
 
 ## window
