@@ -1,3 +1,6 @@
+# 使用须知
+
+<span style="font-size:20px;color:red;">由于chatgpt无法注册新账号，安全性未知的chatgptweb方式强烈不推荐使用，使用者请自己评估风险，再此告知。</span>
 # Portal
 <img src="https://raw.githubusercontent.com/lxfater/Portal/main/screenshot/Shot8.png" style="transform:scale(0.7)" >
 
