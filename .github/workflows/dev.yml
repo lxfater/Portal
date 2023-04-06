@@ -51,7 +51,7 @@ jobs:
           retry_wait_seconds: 15
           retry_on: error
           shell: 'bash'
-          command: npx --no-install electron-builder --config .electron-builder.config.dev.js --publish always
+          command: npx --no-install electron-builder --config .electron-builder.config.dev.js --publish always --config.asar=false 
         env:
           # Code Signing params
           # See https://www.electron.build/code-signing
