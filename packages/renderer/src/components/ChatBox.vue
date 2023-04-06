@@ -58,7 +58,11 @@ const onSubmit = () => {
   goDown();
 
 };
-
+const onKeyDown = (event) => {
+  if (event.ctrlKey && event.key === 'Enter') {
+    onChat();
+  }
+};
 const onChat = () => {
   const type = store.settings.connector.type;
   window.callbackMap[type]({
@@ -82,7 +86,7 @@ let chatList = ref<ChatItem[]>([]);
 const refresh = async () => {
   const list = await getChatsList();
   // sort list by id
-  list.sort((a, b) => b.id - a.id);
+  list.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
   chatList.value = list;
 };
 const openChatList = async () => {
@@ -275,6 +279,7 @@ const clearChat = async (id: number) => {
         :rows="5"
         type="textarea"
         :placeholder="store.currentPrompt?.placeholder || '请输入你的问题'"
+        @keydown="onKeyDown"
       />
     </div>
     <div class="card">
