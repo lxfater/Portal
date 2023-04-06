@@ -12,7 +12,7 @@
     "build:preload": "cd ./packages/preload && vite build",
     "build:renderer": "cd ./packages/renderer && vite build",
     "build:chat": "cd ./packages/chat && vite build",
-    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js  --config.asar=true",
+    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js,  --config.asar=true",
     "test": "npm run test:main && npm run test:preload && npm run test:renderer && npm run test:e2e",
     "test:e2e": "npm run build && vitest run",
     "test:main": "vitest run -r packages/main --passWithNoTests",
