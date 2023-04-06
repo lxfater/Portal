@@ -58,7 +58,6 @@
     "active-win": "^8.1.0",
     "classic-level": "^1.2.0",
     "custom-electron-titlebar": "^4.2.0-beta.0",
-    "electron-acrylic-window": "^0.5.11",
     "electron-selected-text": "^1.1.2",
     "electron-updater": "5.3.0",
     "element-plus": "^2.3.0",
