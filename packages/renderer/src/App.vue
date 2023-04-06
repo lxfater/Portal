@@ -29,6 +29,7 @@ const createNewChat = (name?: string) => {
 };
 store.$subscribe(() => {
   // console.log('store changed', toRaw(store));
+  //
 });
 onMainStatus('error', (message) => {
   ElMessage.error({
