@@ -12,6 +12,7 @@
     const {getVersion} = await import('./version/getVersion.mjs');
   
     return {
+      productName: 'Portal-Dev',
       compression: 'maximum',
       npmRebuild: false,
       win: {
