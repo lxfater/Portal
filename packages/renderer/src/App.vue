@@ -1,6 +1,6 @@
 
 <script lang="ts" setup>
-import { onMainAsk, saveSetting, getSetting, sendToMain, onMainStatus, writeClipboard, setWindowPosition, saveChat, getPromptList, getCascadePrompt, getOs } from '#preload';
+import { onMainAsk, saveSetting, getSetting, sendToMain, onMainStatus, writeClipboard, setWindowPosition, saveChat, getPromptList, getCascadePrompt, getOs, showNotification } from '#preload';
 import { ElMessage } from 'element-plus';
 import { debounce } from 'lodash';
 import { onMounted, toRaw, watch } from 'vue';
@@ -205,13 +205,14 @@ onMounted(async () => {
             setTimeout(async () => {
               await writeClipboard(info.message);
               // message to client
-              ElMessage.success({
-                showClose: true,
-                message: '已复制到剪贴板',
-                offset: 100,
-                center: true,
-                duration: 1000,
-              });
+              // ElMessage.success({
+              //   showClose: true,
+              //   message: '已复制到剪贴板',
+              //   offset: 100,
+              //   center: true,
+              //   duration: 1000,
+              // });
+              await showNotification('portal','已复制到剪贴板');
             }, 1500);
           }
           if (pipeline.writeToCursor) {
@@ -280,13 +281,14 @@ const handleMessage = async (e: { channel: string; }) => {
       // write to clipboard
       await writeClipboard(m.message);
       // message to client
-      ElMessage.success({
-        showClose: true,
-        message: '已复制到剪贴板',
-        offset: 100,
-        center: true,
-        duration: 1000,
-      });
+      // ElMessage.success({
+      //   showClose: true,
+      //   message: '已复制到剪贴板',
+      //   offset: 100,
+      //   center: true,
+      //   duration: 1000,
+      // });
+      showNotification('portal','已复制到剪贴板');
     }, 1000);
   }
   if (pipeline.writeToCursor) {

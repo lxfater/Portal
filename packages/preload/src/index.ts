@@ -194,3 +194,7 @@ export function openWebsite(url: string) {
 export function getOs() {
     return ipcRenderer.invoke('getOs');
 }
+
+export function showNotification(title: string, body: string) {
+    return ipcRenderer.invoke('showNotification', title, body);
+}

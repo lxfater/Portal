@@ -14,6 +14,9 @@
     return {
       productName: 'Portal-Dev',
       compression: 'maximum',
+      "extraResources": [
+        "./buildResources/**"
+      ],
       npmRebuild: false,
       win: {
         'requestedExecutionLevel': 'requireAdministrator',

@@ -1,5 +1,5 @@
 import type { BrowserWindow } from 'electron';
-import { session , shell } from 'electron';
+import { session , shell, Notification } from 'electron';
 import { clipboard } from 'electron';
 import { app } from 'electron';
 import { ipcMain } from 'electron';
@@ -327,6 +327,14 @@ export function messageHandle(browserWindow: BrowserWindow) {
     });
     ipcMain.handle('openWebsite', async (e, website:string) => {
         shell.openExternal(website);
+    });
+    // showNotification
+    ipcMain.handle('showNotification', async (e, title: string, body: string, timeout = 2000) => {
+        const notification = new Notification({body, title });
+        notification.show();
+        setTimeout(() => {
+            notification.close();
+        }, timeout);
     });
 }
 
