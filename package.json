@@ -1,7 +1,7 @@
 {
   "name": "portal",
   "description": "Your best AI portal",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "author": {},
   "main": "packages/main/dist/index.cjs",
