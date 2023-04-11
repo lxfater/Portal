@@ -4,7 +4,7 @@ import { useStore } from '../state';
 import { ElMessage } from 'element-plus';
 import { languageOptions } from '../utils';
 import AddConversation from './AddConversation.vue';
-import { deleteChat, getCascadePrompt, getChat, getChatsList, getPrompt, getPromptCascades, saveChatAsMarkdown } from '#preload';
+import { deleteChat, getCascadePrompt, getChat, getChatsList, getPrompt, getPromptCascades, callChatgptWeb, saveChatAsMarkdown } from '#preload';
 import {
   Download,
   Plus,
@@ -46,7 +46,7 @@ const saveAsMarkdown = async () => {
 const onSubmit = () => {
   const type = store.settings.connector.type;
 
-  window.callbackMap[type]({
+  window.aiCallBack({
     type: 'ask',
     payload: {
       provider: type,
@@ -55,7 +55,7 @@ const onSubmit = () => {
     },
   });
 
-  goDown();
+  // goDown();
 
 };
 const onKeyDown = (event) => {
@@ -63,9 +63,9 @@ const onKeyDown = (event) => {
     onChat();
   }
 };
-const onChat = () => {
-  const type = store.settings.connector.type;
-  window.callbackMap[type]({
+const onChat = async () => {
+  const type = 'openAi';
+  window.aiCallBack({
     type: 'ask',
     payload: {
       provider: type,
@@ -74,6 +74,7 @@ const onChat = () => {
     },
   });
   goDown();
+  // await callChatgptWeb();
 };
 
 const goDown = () => {

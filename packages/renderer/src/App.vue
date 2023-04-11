@@ -1,12 +1,11 @@
 
 <script lang="ts" setup>
-import { onMainAsk, saveSetting, getSetting, sendToMain, onMainStatus, writeClipboard, setWindowPosition, saveChat, getPromptList, getCascadePrompt, getOs, showNotification } from '#preload';
+import { callLLM, onMainAsk, saveSetting, getSetting, sendToMain, onMainStatus, writeClipboard, setWindowPosition, saveChat, getPromptList, getCascadePrompt, getOs, showNotification, askChatgpt, onMainAskChatgpt, sendToMainChatgpt } from '#preload';
 import { ElMessage } from 'element-plus';
 import { debounce } from 'lodash';
 import { onMounted, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { chatgptMessage, Job, Pipeline } from '../../types';
-import { Openai } from './ai/openai';
+import type { chatgptMessage, Job, LLMPrams, Message, Pipeline } from '../../types';
 import { useStore } from './state';
 import ChatGPTViewer from '/@/components/ChatGPTViewer.vue';
 import Handlebars from 'handlebars';
@@ -157,7 +156,8 @@ onMounted(async () => {
   }, {
     deep: true,
   });
-  const openAiHandle = async (job: Job) => {
+  const aiHandle = async (job: Job) => {
+    console.log('aiHandle', job);
     const pipeline = store.getPipelineById(job.payload.mode);
     jumpTo(pipeline);
     handleBeforeClear(pipeline);
@@ -170,9 +170,7 @@ onMounted(async () => {
       return 0;
     }
     const finalQuestion = await handleQuestion(extraQuestion,pipeline);
-    const { apiKey, model, maxToken } = store.settings.connector.openAi;
-    const openai = new Openai(apiKey, model, maxToken);
-    const controller = new AbortController();
+
     const time = new Date().getTime();
     try {
       if (pipeline.questionMode === 'ask') {
@@ -183,16 +181,30 @@ onMounted(async () => {
           createNewChat();
         }
       }
-      await openai.ask(finalQuestion, {
-        signal: controller.signal,
-        onMessage: (info: any) => {
+      
+      // eslint-disable-next-line no-inner-declarations
+      function createOption() {
+        const type = store.settings.connector.type;
+        const option: LLMPrams = {
+          question: finalQuestion,
+          mode: pipeline.questionMode,
+          type: type === 'openAi' ? 'openai' : 'chatgpt',
+          model: type === 'openAi' ? store.settings.connector.openAi.model : store.settings.connector.chatgptWeb.model,
+        };
+        if (type === 'openAi') {
+          option.apiKey = store.settings.connector.openAi.apiKey;
+          option.maxToken = parseInt(store.settings.connector.openAi.maxToken);
+        }
+        return option;
+      }
+      await callLLM(createOption(), (info: Message) => {
+          console.log('onMessage', info, time);
           if (pipeline.questionMode === 'ask') {
             store.updateHistory({
               question: finalQuestion,
               answer: info.message,
               time: time,
             });
-
           } else {
             store.updateHistory({
               question: finalQuestion,
@@ -204,14 +216,6 @@ onMounted(async () => {
           if (pipeline.writeToClipboard && info.done) {
             setTimeout(async () => {
               await writeClipboard(info.message);
-              // message to client
-              // ElMessage.success({
-              //   showClose: true,
-              //   message: '已复制到剪贴板',
-              //   offset: 100,
-              //   center: true,
-              //   duration: 1000,
-              // });
               await showNotification('portal','已复制到剪贴板');
             }, 1500);
           }
@@ -233,137 +237,52 @@ onMounted(async () => {
             handleAfterClear(pipeline);
           }
          
-        },
-      }) as string;
+        });
     } catch (error: { message: string; }) {
       handleError(error.message);
     }
 
   };
-  window.onRenderAsk('openAi', openAiHandle);
-  onMainAsk('openAi', openAiHandle);
+  window.onRenderAsk(aiHandle);
+  onMainAsk(aiHandle);
 });
 const changeRoute = (route: string) => {
   router.push(route);
 };
-
-let mode = 'read';
-
-const handleMessage = async (e: { channel: string; }) => {
-  const msg = JSON.parse(e.channel) as chatgptMessage;
-  if (msg.type === 'error') {
-    handleError(msg.payload.message);
-    return 0;
-  }
-  const m = msg.payload;
-  const pipeline = store.getPipelineById(m.mode);
-
-  if (pipeline.questionMode === 'ask') {
-    store.updateHistory({
-      question: m.question,
-      answer: m.message,
-      time: m.time,
-    });
-
-  } else {
-    store.updateHistory({
-      question: m.question,
-      answer: m.message,
-      time: m.time,
-    });
-  }
-
-  store.chat.cid = m.conversationID || '';
-  store.chat.pid = m.parentMessageId || '';
-
-  if (pipeline.writeToClipboard && m.done) {
-    setTimeout(async () => {
-      // write to clipboard
-      await writeClipboard(m.message);
-      // message to client
-      // ElMessage.success({
-      //   showClose: true,
-      //   message: '已复制到剪贴板',
-      //   offset: 100,
-      //   center: true,
-      //   duration: 1000,
-      // });
-      showNotification('portal','已复制到剪贴板');
-    }, 1000);
-  }
-  if (pipeline.writeToCursor) {
-    sendToMain({
+onMounted(() => {
+  const handleMessage = (e: { channel: string; }) => {
+    const msg = JSON.parse(e.channel) as chatgptMessage;
+    const m = msg.payload;
+    sendToMainChatgpt({
       type: 'answer',
       payload: {
         provider: 'chatgptWeb',
         message: m.message,
         done: m.done,
-        mode,
+        mode: 'read',
       },
     });
-  }
-
-  if(m.done) {
-    saveChat(toRaw(store.chat));
-  }
-  if(m.done) {
-    handleAfterClear(pipeline);
-  }
-  
-
-};
-
-
-onMounted(() => {
-  const webview = document.getElementById('webview') as any;
+  };
   const ready = () => {
+    const webview = document.getElementById('webview') as any;
     webview!.removeEventListener('ipc-message', handleMessage);
     webview!.addEventListener('ipc-message', handleMessage);
     if (import.meta.env.DEV && !webview!.isDevToolsOpened()) {
       webview!.openDevTools();
     }
     const chatgptWebHandle = async (job: Job) => {
-      if (job.type === 'answer') {
-        return 0;
-      }
-      const pipeline = store.getPipelineById(job.payload.mode);
-      jumpTo(pipeline);
-      handleBeforeClear(pipeline);
-      const extraQuestion = handleAddExtra(pipeline, job.payload.question);
-      if (!pipeline.autoSend) {
-        store.question = extraQuestion;
-        return 0;
-      }
-      const finalQuestion = await handleQuestion(extraQuestion, pipeline);
       const { model } = store.settings.connector.chatgptWeb;
       const time = new Date().getTime();
-      if (pipeline.questionMode === 'ask') {
-        const id = new Date().getTime();
-        createNewChat(`新询问-${id}`);
-        webview!.send('question', JSON.stringify({
-          message: finalQuestion,
-          model,
-          mode: job.payload.mode,
-          time,
-        }));
-      } else {
-
-        if (store.chat.id === -1) {
-          createNewChat();
-        }
-        webview!.send('chat', JSON.stringify({
-          message: finalQuestion,
-          model,
-          mode: job.payload.mode,
-          conversationID: store.chat.cid,
-          parentMessageId: store.chat.pid,
-          time,
-        }));
-      }
-
+      webview!.send('question', JSON.stringify({
+        message: job.payload.question,
+        model,
+        mode: job.payload.mode,
+        conversationID: store.chat.cid,
+        parentMessageId: store.chat.pid,
+        time,
+      }));
     };
-    window.onRenderAsk('chatgptWeb', chatgptWebHandle);
-    onMainAsk('chatgptWeb', chatgptWebHandle);
+    onMainAskChatgpt(chatgptWebHandle);
   };
   webview!.addEventListener('dom-ready', ready);
 });

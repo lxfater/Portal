@@ -124,3 +124,13 @@ export type chatgptMessage = {
     message: string;
   };
 }
+
+
+export type LLMPrams = {
+  type: 'chatgpt' | 'openai',
+  mode: 'ask' | 'chat',
+  question: string;
+  model: string;
+  maxToken?: number;
+  apiKey?: string;
+};
