@@ -140,6 +140,7 @@ export function callLLM(prams: LLMPrams, onMessage:(answer: Message) => void) {
         const handle = (e, message: Message) => {
             if(message.done) {
                 ipcRenderer.removeListener('answerLLM', handle);
+                onMessage(message);
                 resolve(message);
             } else {
                 onMessage(message);

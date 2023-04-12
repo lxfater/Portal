@@ -399,7 +399,7 @@ ipcRenderer.on('chat', async (e, info) => {
     }
 });
 
-ipcRenderer.on('question', async (e, info) => {
+ipcRenderer.on('ask', async (e, info) => {
   const { message, model,mode, time } = JSON.parse(info);
   try {
     await bridge.ask(message, {

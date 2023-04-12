@@ -1,9 +1,11 @@
 export type MessageTypes = 'ask' | 'answer' ;
-export type JobMode = number
+export type JobMode = 'chat' | 'ask';
 export type Provider = 'chatgptWeb' | 'openAi' | 'baidu';
 export type Message = { 
     message: string;
     done: boolean;
+    pid: string;
+    cid: string;
 }
 export type Job = askJob | answerJob;
 export type answerJob = {
@@ -21,6 +23,8 @@ export type askJob = {
         provider:Provider,
         question: string;
         mode: JobMode;
+        conversationID?: string;
+        parentMessageId?: string;
     }
 }
 export type Prompt = {
@@ -133,4 +137,5 @@ export type LLMPrams = {
   model: string;
   maxToken?: number;
   apiKey?: string;
+  id: number; // chat id
 };

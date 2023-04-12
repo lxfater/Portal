@@ -14,6 +14,9 @@ import { ChatOpenAIWeb } from '../common/model';
 import { HumanChatMessage } from 'langchain/schema';
 import { CallbackManager } from 'langchain/callbacks';
 import { ChatOpenAI } from 'langchain/chat_models';
+import { BufferWindowMemory, ChatMessageHistory } from 'langchain/memory';
+import {  AIChatMessage } from 'langchain/schema';
+import { ConversationChain } from 'langchain/chains';
 
 
 export function messageHandle(browserWindow: BrowserWindow) {
@@ -336,41 +339,114 @@ export function messageHandle(browserWindow: BrowserWindow) {
     });
 
     ipcMain.handle('callLLM', async (e, params:LLMPrams) => {
-        const { question, type, mode, model, apiKey } = params;
-        let chat = null;
+        const { question, type, mode, model, apiKey,id } = params;
+        let messageCache = '';
         if(type === 'openai') {
-            chat = new ChatOpenAI({
-                modelName: model,
-                openAIApiKey: apiKey,
-                callbackManager: CallbackManager.fromHandlers({
-                    async handleLLMNewToken(token: string) {
-                      browserWindow.webContents.send('answerLLM', {
-                        message: token,
-                        done: false,
-                      });
-                    },
-                }),
-            });
+            if(mode === 'ask') {
+                const chain = new ChatOpenAI({
+                    modelName: model,
+                    openAIApiKey: apiKey,
+                    streaming: true,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache += token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message:messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result =  await chain.call([message]);
+                browserWindow.webContents.send('answerLLM', {
+                    message: result,
+                    done: true,
+                });
+            } else {
+                const chatData: Chat = await chats.get(id);
+                const pastMessages = Object.values(chatData.history).map(item => {
+                    return [new HumanChatMessage(item.question), new AIChatMessage(item.answer)];
+                 }).flat();
+                 const memory = new BufferWindowMemory({
+                    chatHistory: new ChatMessageHistory(pastMessages),
+                    k:5,
+                });
+                const llm = new ChatOpenAI({
+                    modelName: model,
+                    openAIApiKey: apiKey,
+                    streaming: true,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache += token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message:messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const chain = new ConversationChain({ llm, memory: memory });
+                const result =  await chain.call({
+                    input: question,
+                });
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                });
+            }
+
         } else if(type === 'chatgpt') {
-            chat = new ChatOpenAIWeb({
-                browserWindow,
-                callbackManager: CallbackManager.fromHandlers({
-                    async handleLLMNewToken(token: string) {
-                      browserWindow.webContents.send('answerLLM', {
-                        message: token,
-                        done: false,
-                      });
-                    },
-                }),
-            });
-  
+            if(mode === 'ask') {
+                const chain = new ChatOpenAIWeb({
+                    browserWindow,
+                    mode,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache = token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message: messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result = await chain.call([message]);                
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                    pid: result.text.parentMessageId,
+                    cid: result.text.conversationID,
+                });
+            } else {
+                const chatData: Chat = await chats.get(id);
+                const chain = new ChatOpenAIWeb({
+                    browserWindow,
+                    mode,
+                    parentMessageId: chatData.pid,
+                    conversationID: chatData.cid,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache = token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message: messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result = await chain.call([message]);                
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                    pid: result.text.parentMessageId,
+                    cid: result.text.conversationID,
+                });
+            }
         }
-        const message = new HumanChatMessage(question);
-        const result =  await chat.call([message]);
-        browserWindow.webContents.send('answerLLM', {
-            message: result,
-            done: true,
-        });
+   
 
     });
 }

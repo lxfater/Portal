@@ -25,6 +25,7 @@ const createNewChat = (name?: string) => {
         next: {},
       };
       saveChat(toRaw(store.chat));
+      return id;
 };
 store.$subscribe(() => {
   // console.log('store changed', toRaw(store));
@@ -172,13 +173,15 @@ onMounted(async () => {
     const finalQuestion = await handleQuestion(extraQuestion,pipeline);
 
     const time = new Date().getTime();
+    let id = -1;
     try {
       if (pipeline.questionMode === 'ask') {
-        const id = new Date().getTime();
-        createNewChat(`新询问-${id}`);
+        id = createNewChat(`新询问-${id}`);
       } else {
         if (store.chat.id === -1) {
-          createNewChat();
+          id = createNewChat();
+        } else {
+          id = store.chat.id;
         }
       }
       
@@ -190,6 +193,7 @@ onMounted(async () => {
           mode: pipeline.questionMode,
           type: type === 'openAi' ? 'openai' : 'chatgpt',
           model: type === 'openAi' ? store.settings.connector.openAi.model : store.settings.connector.chatgptWeb.model,
+          id,
         };
         if (type === 'openAi') {
           option.apiKey = store.settings.connector.openAi.apiKey;
@@ -203,13 +207,13 @@ onMounted(async () => {
             store.updateHistory({
               question: finalQuestion,
               answer: info.message,
-              time: time,
+              time,
             });
           } else {
             store.updateHistory({
               question: finalQuestion,
               answer: info.message,
-              time: time,
+              time,
             });
           }
 
@@ -231,6 +235,8 @@ onMounted(async () => {
             });
           }
           if(info.done) {
+            store.chat.cid = info.cid;
+            store.chat.pid = info.pid;
             saveChat(toRaw(store.chat));
           }
           if(info.done) {
@@ -260,6 +266,8 @@ onMounted(() => {
         message: m.message,
         done: m.done,
         mode: 'read',
+        conversationID: m.conversationID,
+        parentMessageId: m.parentMessageId,
       },
     });
   };
@@ -271,14 +279,15 @@ onMounted(() => {
       webview!.openDevTools();
     }
     const chatgptWebHandle = async (job: Job) => {
+      console.log('chatgptWebHandle', job);
       const { model } = store.settings.connector.chatgptWeb;
       const time = new Date().getTime();
-      webview!.send('question', JSON.stringify({
+      webview!.send(job.payload.mode, JSON.stringify({
         message: job.payload.question,
         model,
         mode: job.payload.mode,
-        conversationID: store.chat.cid,
-        parentMessageId: store.chat.pid,
+        conversationID: job.payload.conversationID,
+        parentMessageId: job.payload.parentMessageId,
         time,
       }));
     };
