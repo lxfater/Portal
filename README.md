@@ -7,7 +7,6 @@ Portal is a cross-platform tool designed to integrate the capabilities of ChatGP
 Specifically, it allows users to send any selected text to ChatGPT for processing via a keyboard shortcut, and then return the result to the user's clipboard or at the cursor position (achieving a typewriter effect). This means that you can immediately access the power of ChatGPT in most applications that do not have access to ChatGPT capabilities.
 
 # TG GROUP
-https://t.me/+71JuyMJsgSIzZWE1
 
 
 # LICENSE
