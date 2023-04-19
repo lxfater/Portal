@@ -58,15 +58,20 @@ export type Pipeline = {
 export type Prompts = Prompt[]
 export type Settings = {
     connector: {
-      type: 'chatgptWeb' | 'openAi' | 'baidu';
+      type: 'chatgptWeb' | 'openAi' ;
       chatgptWeb: {
         loginUrl: string;
         model: string;
+        autoRefresh: boolean;
+        autoRefreshInterval: number;
+        autoRefreshUrl: string;
+        cloudFlareReload: boolean;
       };
       openAi: {
         apiKey: string;
         model: string;
         maxToken: string;
+        memory: string;
       };
       baidu: {
         apiKey: string;
@@ -129,6 +134,10 @@ export type chatgptMessage = {
   };
 }
 
+export type RefreshSetting = {
+  autoRefresh: boolean;
+  autoRefreshInterval: number;
+}
 
 export type LLMPrams = {
   type: 'chatgpt' | 'openai',

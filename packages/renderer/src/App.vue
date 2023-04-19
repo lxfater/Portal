@@ -21,7 +21,7 @@ const createNewChat = (name?: string) => {
         id,
         pid: '',
         cid: '',
-        name: name || `新对话-${id}`,
+        name: name || `new-${id}`,
         next: {},
       };
       saveChat(toRaw(store.chat));
@@ -64,7 +64,7 @@ const handleQuestion = async (question: string, pipeline: Pipeline) => {
     const q = template({
       i: longText,
       input: longText,
-      targetLanguage: store.settings.targetLanguage || '中文',
+      targetLanguage: store.settings.targetLanguage || 'english',
     });
     return q;
   } else {
@@ -73,7 +73,7 @@ const handleQuestion = async (question: string, pipeline: Pipeline) => {
       const question = template({
         i: store.question,
         input: store.question,
-        targetLanguage: store.settings.targetLanguage || '中文',
+        targetLanguage: store.settings.targetLanguage || 'english',
       });
       return question;
     } else {
@@ -258,6 +258,10 @@ const changeRoute = (route: string) => {
 onMounted(() => {
   const handleMessage = (e: { channel: string; }) => {
     const msg = JSON.parse(e.channel) as chatgptMessage;
+    if(msg.type === 'error' && msg.payload.message === 'cloudFlare' && store.settings.connector.chatgptWeb.cloudFlareReload) {
+      window.reloadWebview();
+      return 0;
+    }
     const m = msg.payload;
     sendToMainChatgpt({
       type: 'answer',
@@ -291,6 +295,19 @@ onMounted(() => {
         time,
       }));
     };
+    window.setRefresh = () => {
+      webview!.send('refresh', JSON.stringify({
+        autoRefreshInterval: store.settings.connector.chatgptWeb.autoRefreshInterval,
+        autoRefreshUrl: store.settings.connector.chatgptWeb.autoRefreshUrl,
+      }));
+    };
+    window.reloadWebview = () => {
+      webview!.reload();
+    };
+    if(store.settings.connector.chatgptWeb.autoRefresh) {
+      
+      window.setRefresh();
+    }
     onMainAskChatgpt(chatgptWebHandle);
   };
   webview!.addEventListener('dom-ready', ready);

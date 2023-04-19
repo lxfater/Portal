@@ -7,11 +7,16 @@ export const settings:Settings = {
     chatgptWeb: {
       loginUrl: 'https://chat.openai.com/chat',
       model: 'text-davinci-002-render-sha',
+      autoRefresh: false,
+      autoRefreshInterval: 30,
+      autoRefreshUrl: 'https://chat.openai.com/_next/static/k9OKjvwgjWES7JT3k-6g9/_ssgManifest.js',
+      cloudFlareReload: false,
     },
     openAi: {
       apiKey: '',
       model: 'gpt-3.5-turbo',
       maxToken: '500',
+      memory: '8',
     },
     baidu: {
       apiKey: '',

@@ -18,15 +18,15 @@ import {
   >
     <el-menu-item index="/management/">
       <el-icon><Connection /></el-icon>
-      <template #title>连接</template>
+      <template #title>connection</template>
     </el-menu-item>
     <el-menu-item index="/management/switch">
       <el-icon><Switch /></el-icon>
-      <template #title>输入方式</template>
+      <template #title>input</template>
     </el-menu-item>
     <el-menu-item index="/management/prompt">
       <el-icon><EditPen /></el-icon>
-      <template #title>提示语库</template>
+      <template #title>prompt</template>
     </el-menu-item>
     <!-- <el-menu-item index="/management/database">
       <el-icon>
@@ -36,11 +36,11 @@ import {
     </el-menu-item> -->
     <el-menu-item index="/management/help">
       <el-icon><Help /></el-icon>
-      <template #title>帮助</template>
+      <template #title>help</template>
     </el-menu-item>
     <el-menu-item index="/management/more">
       <el-icon><More /></el-icon>
-      <template #title>更多</template>
+      <template #title>more</template>
     </el-menu-item>
   </el-menu>
 </template>

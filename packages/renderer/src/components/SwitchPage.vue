@@ -28,7 +28,7 @@ const deletePrompt = (p: Pipeline) => {
     ref="addOrEditSwitch"
   ></AddOrEditSwitch>
   <div class="bar">
-    <div>快捷键配置:{{ `${store.settings.currentOs === 'darwin'? '需要配置后才可用，查看帮助菜单获取教程': ''}` }}</div>
+    <div>Shortcut Key Configuration:{{ `${store.settings.currentOs === 'darwin'? 'It needs to be configured before it can be used. Please check the help menu for tutorials.': ''}` }}</div>
     <el-button
       :icon="Plus"
       circle
@@ -39,7 +39,7 @@ const deletePrompt = (p: Pipeline) => {
     v-if="store.settings.currentOs === 'darwin'"
     class="setting"
   >
-    <el-form-item label="光标回写功能，需要屏幕录制权限判断界面失焦">
+    <el-form-item label="The cursor write-back function requires screen recording permission to determine when the interface loses focus.">
       <el-switch
         v-model="store.settings.system.darwin.allowWriteBack"
         size="small"

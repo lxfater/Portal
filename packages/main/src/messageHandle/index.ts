@@ -13,7 +13,7 @@ import { platform } from 'os';
 import { ChatOpenAIWeb } from '../common/model';
 import { HumanChatMessage } from 'langchain/schema';
 import { CallbackManager } from 'langchain/callbacks';
-import { ChatOpenAI } from 'langchain/chat_models';
+import { ChatOpenAI } from 'langchain/chat_models/openai';
 import { BufferWindowMemory, ChatMessageHistory } from 'langchain/memory';
 import {  AIChatMessage } from 'langchain/schema';
 import { ConversationChain } from 'langchain/chains';
@@ -370,7 +370,7 @@ export function messageHandle(browserWindow: BrowserWindow) {
                  }).flat();
                  const memory = new BufferWindowMemory({
                     chatHistory: new ChatMessageHistory(pastMessages),
-                    k:5,
+                    k:8,
                 });
                 const llm = new ChatOpenAI({
                     modelName: model,

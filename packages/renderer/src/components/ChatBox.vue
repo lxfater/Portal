@@ -39,6 +39,10 @@ const copy = () => {
   });
 };
 
+const reloadWebview = () => {
+  window.reloadWebview();
+};
+
 const saveAsMarkdown = async () => {
   await saveChatAsMarkdown(toRaw(store.chat));
 };
@@ -207,7 +211,7 @@ const clearChat = async (id: number) => {
           v-model="store.currentPromptPath"
           size="small"
           style="width: 150px;"
-          placeholder="筛选你的提示语"
+          placeholder="Filter your prompts"
           :options="cascadePrompt"
           filterable
           clearable
@@ -233,7 +237,7 @@ const clearChat = async (id: number) => {
         </el-cascader>
         <el-select
           v-model="store.settings.targetLanguage"
-          placeholder="选择目标语言，默认中文"
+          placeholder="Select target language, default is English"
           style="width: 100px;"
           size="small"
         >
@@ -253,7 +257,7 @@ const clearChat = async (id: number) => {
               store.chat.parentHistory = null
             }"
           >
-            取消关联
+            clear Connection
           </el-button>
         </div>
         <div>
@@ -262,14 +266,14 @@ const clearChat = async (id: number) => {
             type="primary"
             @click="openChatList"
           >
-            对话列表
+            list
           </el-button>
           <el-button
             size="small"
             type="primary"
             @click="onChat"
           >
-            聊天
+            chat
           </el-button>
         </div>
       </div>
@@ -279,7 +283,7 @@ const clearChat = async (id: number) => {
         show-word-limit
         :rows="5"
         type="textarea"
-        :placeholder="store.currentPrompt?.placeholder || '请输入你的问题'"
+        :placeholder="store.currentPrompt?.placeholder || 'Please input your question'"
         @keydown="onKeyDown"
       />
     </div>
@@ -287,13 +291,30 @@ const clearChat = async (id: number) => {
       <div class="bar">
         <div class="title">{{ store.chat && store.chat.name }}</div>
         <div class="action">
-          <el-icon size="25">
-            <Compass @click="toggle" />
-          </el-icon>
-    
-          <el-icon size="25">
-            <Download @click="saveAsMarkdown" />
-          </el-icon>
+          <el-tooltip
+            content="Reload when thing goes wrong"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Refresh @click="reloadWebview" />
+            </el-icon>
+          </el-tooltip>
+          <el-tooltip
+            content="Map"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Compass @click="toggle" />
+            </el-icon>
+          </el-tooltip>
+          <el-tooltip
+            content="saveAsMarkdown"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Download @click="saveAsMarkdown" />
+            </el-icon>
+          </el-tooltip>
         </div>
       </div>
       <div

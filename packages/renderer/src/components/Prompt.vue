@@ -96,13 +96,13 @@ onMounted(async () => {
     ></AddOrEditPrompt>
     <el-tabs v-model="activeName">
       <el-tab-pane
-        label="个人提示语"
+        label="Personal"
         name="personal"
       >
         <div class="bar">
           <el-cascader
             v-model="personal.scopeAndActivity"
-            placeholder="筛选你的提示语"
+            placeholder="Personal"
             :options="personal.promptCascades"
             filterable
             clearable
@@ -145,13 +145,13 @@ onMounted(async () => {
         </div>
       </el-tab-pane>
       <el-tab-pane
-        label="公开提示语"
+        label="Public"
         name="public"
       >
         <div class="bar">
           <el-cascader
             v-model="public1.scopeAndActivity"
-            placeholder="筛选你的提示语"
+            placeholder="Public"
             :options="public1.promptCascades"
             filterable
             clearable
@@ -161,7 +161,7 @@ onMounted(async () => {
             size="small"
             @click="addPrompts"
           >
-            导入
+            Import
           </el-button>
         </div>
         <div class="table">

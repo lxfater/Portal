@@ -13,7 +13,9 @@ import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 declare global {
     interface Window {
         onRenderAsk: (callback: (job: Job) => void) => void;
-        aiCallBack: (job: Job) => void
+        aiCallBack: (job: Job) => void;4
+        setRefresh: () => void;
+        reloadWebview: () => void;
     }
 }
 window.aiCallBack = (job: Job) => {

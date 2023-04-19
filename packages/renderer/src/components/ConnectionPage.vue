@@ -38,17 +38,24 @@ const openAiModel = [
     label: 'GPT-3.5-turbo',
   },
 ];
+
+const setRefresh = () => {
+  if(window.setRefresh) {
+    window.setRefresh();
+  }
+};
 </script>
 
 <template>
   <div class="connectionContainer">
     <el-form
       label-width="auto"
+      label-position="top"
     >
-      <el-form-item label="接入方式">
+      <el-form-item label="client">
         <el-select
           v-model="store.settings.connector.type"
-          placeholder="请选择接入方式"
+          placeholder="client"
           size="small"
         >
           <el-option
@@ -63,11 +70,11 @@ const openAiModel = [
         v-if="store.settings.connector.type === 'chatgptWeb'"
         class="chatgptWeb"
       >
-        <div class="danger">注意：本功能仅为实验功能，无法保证对账号的安全性，建议使用小号使用。</div>
-        <el-form-item label="模型">
+        <div class="danger">Note: This feature is only an experimental function and cannot guarantee the security of your account. It is recommended to use a secondary account.</div>
+        <el-form-item label="Model">
           <el-select
             v-model="store.settings.connector.chatgptWeb.model"
-            placeholder="请选择接入的模型"
+            placeholder="Model"
             size="small"
           >
             <el-option
@@ -78,10 +85,10 @@ const openAiModel = [
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="登录地址">
+        <el-form-item label="loginUrl">
           <el-input
             v-model="store.settings.connector.chatgptWeb.loginUrl"
-            placeholder="请输入登录地址"
+            placeholder="loginUrl"
             size="small"
           />
         </el-form-item>
@@ -90,19 +97,54 @@ const openAiModel = [
           size="small"
           @click="clearCache"
         >
-          清除缓存
+          Clear cache
         </el-button>
-        <span style="font-size:12px;margin-left:10px; color:red">清除缓存并将重启应用</span>
+        <span style="font-size:12px;margin-left:10px; color:red">Clear cache and restart the application</span>
+        <div
+          class="danger"
+          style="margin-top: 10px;"
+        >
+          The auto-refresh feature can improve the disconnection issue, but there may be unknown risks.
+        </div>
+        <el-form-item label="autoRefresh">
+          <el-switch v-model="store.settings.connector.chatgptWeb.autoRefresh" />
+        </el-form-item>
+        <div v-if="store.settings.connector.chatgptWeb.autoRefresh">
+          <el-form-item label="autoRefreshInterval">
+            <el-input
+              v-model="store.settings.connector.chatgptWeb.autoRefreshInterval"
+              placeholder="autoRefreshInterval seconds"
+              size="small"
+            />
+          </el-form-item>
+          <el-form-item label="autoRefreshUrl">
+            <el-input
+              v-model="store.settings.connector.chatgptWeb.autoRefreshUrl"
+              placeholder="autoRefreshUrl"
+              size="small"
+            />
+          </el-form-item>
+          <el-button
+            type="danger"
+            size="small"
+            @click="setRefresh"
+          >
+            setRefresh
+          </el-button>
+        </div>
+        <el-form-item label="cloudFlareReload">
+          <el-switch v-model="store.settings.connector.chatgptWeb.cloudFlareReload" />
+        </el-form-item>
       </div>
       <div
         v-else-if="store.settings.connector.type === 'openAi'"
         class="openAi"
       >
-        <div class="danger">注意：本功能仅为实验功能，假如你违反了openai的用户政策，本软件不会承担任何责任，建议使用小号使用。</div>
+        <div class="danger">Note: This feature is only an experimental function. If you violate OpenAI's user policy, this software will not be responsible. It is recommended to use a secondary account.</div>
         <el-form-item label="apikey">
           <el-input
             v-model="store.settings.connector.openAi.apiKey"
-            placeholder="请输入apikey"
+            placeholder="apikey"
             type="password"
             size="small"
           />
@@ -110,14 +152,14 @@ const openAiModel = [
         <el-form-item label="maxTokens">
           <el-input
             v-model="store.settings.connector.openAi.maxToken"
-            placeholder="请输入maxToken"
+            placeholder="maxToken"
             size="small"
           />
         </el-form-item>
-        <el-form-item label="模型">
+        <el-form-item label="Model">
           <el-select
             v-model="store.settings.connector.openAi.model"
-            placeholder="请选择接入的模型"
+            placeholder="Model"
             size="small"
           >
             <el-option
