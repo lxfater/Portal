@@ -31,6 +31,4 @@ concurrency:
 
 jobs:
   draft_release:
-    with:
-      dry-run: ${{ github.event_name != 'push' || github.ref_name != 'main' }}
     uses: ./.github/workflows/release.yml
