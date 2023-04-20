@@ -1,26 +1,27 @@
 import type { BrowserWindow } from 'electron';
-import { session , shell } from 'electron';
+import { session , shell, Notification } from 'electron';
 import { clipboard } from 'electron';
 import { app } from 'electron';
 import { ipcMain } from 'electron';
-import type { Chat, Job, Prompt } from '../../../types';
+import type { Chat, Job, LLMPrams, Prompt } from '../../../types';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { handleAllShortcut, readSetting, write, setWindowPosition } from '../common';
 import { chats, prompts } from '../common/db';
 import { dialog } from 'electron';
 import { platform } from 'os';
+import { ChatOpenAIWeb } from '../common/model';
+import { HumanChatMessage } from 'langchain/schema';
+import { CallbackManager } from 'langchain/callbacks';
+import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { BufferWindowMemory, ChatMessageHistory } from 'langchain/memory';
+import {  AIChatMessage } from 'langchain/schema';
+import { ConversationChain } from 'langchain/chains';
+
+
 export function messageHandle(browserWindow: BrowserWindow) {
     ipcMain.handle('getOs',() => {
         return platform();
-    });
-    ipcMain.handle('sendToMain', async (event, m: Job) => {
-        if (m.type === 'answer') {
-            write({
-                done: m.payload.done || false,
-                message: m.payload.message,
-            });
-        }
     });
     ipcMain.handle('unOnTop', () => {
         browserWindow.setAlwaysOnTop(false);
@@ -327,6 +328,126 @@ export function messageHandle(browserWindow: BrowserWindow) {
     });
     ipcMain.handle('openWebsite', async (e, website:string) => {
         shell.openExternal(website);
+    });
+    // showNotification
+    ipcMain.handle('showNotification', async (e, title: string, body: string, timeout = 2000) => {
+        const notification = new Notification({body, title });
+        notification.show();
+        setTimeout(() => {
+            notification.close();
+        }, timeout);
+    });
+
+    ipcMain.handle('callLLM', async (e, params:LLMPrams) => {
+        const { question, type, mode, model, apiKey,id } = params;
+        let messageCache = '';
+        if(type === 'openai') {
+            if(mode === 'ask') {
+                const chain = new ChatOpenAI({
+                    modelName: model,
+                    openAIApiKey: apiKey,
+                    streaming: true,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache += token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message:messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result =  await chain.call([message]);
+                browserWindow.webContents.send('answerLLM', {
+                    message: result,
+                    done: true,
+                });
+            } else {
+                const chatData: Chat = await chats.get(id);
+                const pastMessages = Object.values(chatData.history).map(item => {
+                    return [new HumanChatMessage(item.question), new AIChatMessage(item.answer)];
+                 }).flat();
+                 const memory = new BufferWindowMemory({
+                    chatHistory: new ChatMessageHistory(pastMessages),
+                    k:8,
+                });
+                const llm = new ChatOpenAI({
+                    modelName: model,
+                    openAIApiKey: apiKey,
+                    streaming: true,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache += token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message:messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const chain = new ConversationChain({ llm, memory: memory });
+                const result =  await chain.call({
+                    input: question,
+                });
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                });
+            }
+
+        } else if(type === 'chatgpt') {
+            if(mode === 'ask') {
+                const chain = new ChatOpenAIWeb({
+                    browserWindow,
+                    mode,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache = token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message: messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result = await chain.call([message]);                
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                    pid: result.text.parentMessageId,
+                    cid: result.text.conversationID,
+                });
+            } else {
+                const chatData: Chat = await chats.get(id);
+                const chain = new ChatOpenAIWeb({
+                    browserWindow,
+                    mode,
+                    parentMessageId: chatData.pid,
+                    conversationID: chatData.cid,
+                    callbackManager: CallbackManager.fromHandlers({
+                        async handleLLMNewToken(token: string) {
+                          messageCache = token;
+                          browserWindow.webContents.send('answerLLM', {
+                            message: messageCache,
+                            done: false,
+                          });
+                        },
+                    }),
+                });
+                const message = new HumanChatMessage(question);
+                const result = await chain.call([message]);                
+                browserWindow.webContents.send('answerLLM', {
+                    message: messageCache,
+                    done: true,
+                    pid: result.text.parentMessageId,
+                    cid: result.text.conversationID,
+                });
+            }
+        }
+   
+
     });
 }
 

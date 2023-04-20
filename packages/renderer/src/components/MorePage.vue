@@ -13,16 +13,12 @@ onMounted(() => {
 <template>
   <div class="moreContainer">
     <div class="item">
-      <span class="label">应用版本: </span>
+      <span class="label">Version: </span>
       <span class="content">{{ version }}</span>
     </div>
     <div class="item">
-      <span class="label">免责声明: </span>
-      <div class="content danger">本软件为实验性质，仅作技术分享，不能用于实际生产。使用者应自行承担使用风险。本软件对本免责声明拥有最终解释权，如有任何疑问，可以到开源项目下进行询问。</div>
-    </div>
-    <div class="item">
-      <span class="label">关于作者: </span>
-      <div class="content">一个练习时长一年半的前端工程师, 单身人士，乐于分享技术，点击下面联系我</div>
+      <span class="label">Disclaimer: </span>
+      <div class="content danger">This software is experimental and is only intended for technical sharing. It cannot be used for actual production. Users should bear the risks of use themselves. This software has the final interpretation right of this disclaimer. If you have any questions, you can ask them in the open source project.</div>
     </div>
     <div class="item">
       <span class="label">github: </span>
@@ -31,39 +27,17 @@ onMounted(() => {
         style="cursor: pointer; color:blue;"
         @click="openWebsite('https://github.com/lxfater')"
       >
-        点击打开
+        visit
       </div>
     </div>
     <div class="item">
-      <span class="label">推特: </span>
+      <span class="label">Twitter: </span>
       <div
         class="content"
         style="cursor: pointer; color:blue;"
         @click="openWebsite('https://twitter.com/lxfater')"
       >
-        点击打开
-      </div>
-    </div>
-    <div class="item">
-      <span
-        class="label"
-      >掘金: </span>
-      <div
-        class="content"
-        style="cursor: pointer; color:blue;"
-        @click="openWebsite('https://juejin.cn/user/3034307822099031')"
-      >
-        点击打开
-      </div>
-    </div>
-    <div class="item">
-      <span class="label">B站: </span>
-      <div
-        class="content"
-        style="cursor: pointer; color:blue;"
-        @click="openWebsite('https://space.bilibili.com/1698450')"
-      >
-        点击打开
+        visit
       </div>
     </div>
   </div>

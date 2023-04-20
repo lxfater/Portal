@@ -399,7 +399,7 @@ ipcRenderer.on('chat', async (e, info) => {
     }
 });
 
-ipcRenderer.on('question', async (e, info) => {
+ipcRenderer.on('ask', async (e, info) => {
   const { message, model,mode, time } = JSON.parse(info);
   try {
     await bridge.ask(message, {
@@ -429,4 +429,29 @@ ipcRenderer.on('ping', async (e, info) => {
   ipcRenderer.sendToHost('pong');
 });
 
+let handle: string | number | NodeJS.Timeout | null | undefined = null;
+ipcRenderer.on('refresh', async (e, info) => {
+  const result = JSON.parse(info) as {
+    autoRefreshUrl: string;
+    autoRefreshInterval: string;
+  };
+  const refreshURL = result.autoRefreshUrl;
+  const refreshInterval = parseInt(result.autoRefreshInterval) * 1000;
+
+  const iframe = document.createElement('iframe');
+  iframe.id = 'heartbeat';
+  iframe.style = 'display:none';
+  iframe.name = 'heartbeat';
+  iframe.src = refreshURL;
+  document.head.insertBefore(iframe, document.head.firstChild);
+  if(handle) {
+    clearInterval(handle);
+  }
+  handle = setInterval(function () {
+      if (iframe && iframe.contentWindow.location.href === refreshURL) {
+          console.log('refreshing');
+          iframe.contentWindow.location.reload(true);
+      }
+  }, refreshInterval);
+});
 

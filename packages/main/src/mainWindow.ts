@@ -1,9 +1,11 @@
-import {app, BrowserWindow} from 'electron';
-import {join} from 'node:path';
-import {URL} from 'node:url';
+import { app, BrowserWindow, Tray, Menu } from 'electron';
+import { join } from 'node:path';
+import { URL } from 'node:url';
 import { messageHandle } from './messageHandle';
 import { resignerService } from './service';
 import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main';
+import * as path from 'node:path';
+import { platform } from 'node:os';
 setupTitlebar();
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -37,6 +39,30 @@ async function createWindow() {
       browserWindow?.webContents.openDevTools();
     }
   });
+  const imagePath = () => {
+    const proImagePath = platform() === 'win32' ? path.join(process.resourcesPath, './buildResources/icons/win/icon.ico'): path.join(process.resourcesPath, './buildResources/cons/mac/icon.icns');
+    return import.meta.env.DEV ? 'D:\\projects\\project\\teleport\\buildResources\\icons\\win\\icon.ico' : proImagePath;
+  };
+  const tray = new Tray(imagePath());
+  // 托盘名称
+  tray.setToolTip('Portal');
+  const contextMenu = Menu.buildFromTemplate([{
+    label: '显示',
+    click: () => { browserWindow.show(); },
+  },
+  {
+    label: '退出',
+    click: () => { browserWindow.destroy(); },
+  },
+  ]);
+  // 载入托盘菜单
+  tray.setContextMenu(contextMenu);
+  // 双击触发
+  tray.on('double-click', () => {
+    // 双击通知区图标实现应用的显示或隐藏
+    browserWindow.isVisible() ? browserWindow.hide() : browserWindow.show();
+    browserWindow.isVisible() ? browserWindow.setSkipTaskbar(false) : browserWindow.setSkipTaskbar(true);
+  });
 
   /**
    * URL for main window.
@@ -52,7 +78,7 @@ async function createWindow() {
   attachTitlebarToWindow(browserWindow);
   resignerService(browserWindow);
   messageHandle(browserWindow);
-  
+
   return browserWindow;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    :title="`${!isAdd ? '编辑' : '添加'}模式`"
+    :title="`${!isAdd ? 'Edit' : 'Add'}`"
     width="80%"
     max-height="80%"
     :before-close="handleClose"
@@ -12,20 +12,20 @@
       style="max-width: 460px"
       size="small"
     >
-      <el-form-item label="模式名称">
+      <el-form-item label="Mode name">
         <el-input
           v-model="form.name"
-          placeholder="请输入模式名称"
+          placeholder="Mode name"
         />
       </el-form-item>
-      <el-form-item label="快捷键">
+      <el-form-item label="Shortcut key">
         <el-input
           v-model="form.shortcut"
-          placeholder="请输入快捷键"
+          placeholder="Please enter the shortcut key"
           @keyup="keyUp"
         />
       </el-form-item>
-      <el-form-item label="跳转到鼠标位置">
+      <el-form-item label="Jump to mouse position">
         <el-switch
           v-model="form.jump"
           size="small"
@@ -33,7 +33,7 @@
           inactive-text="Close"
         />
       </el-form-item>
-      <el-form-item label="清理历史数据">
+      <el-form-item label="Clear historical data">
         <el-select
           v-model="form.beforeClear"
           placeholder="Select"
@@ -47,11 +47,11 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="选择快捷指令的提示语">
+      <el-form-item label="Select prompt for quick command">
         <el-select
           v-model="form.extra"
           filterable
-          placeholder="输入即可搜索你的提示语模板"
+          placeholder="Enter to search for your prompt template"
         >
           <el-option
             v-for="item in prompts"
@@ -63,10 +63,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择输出语言">
+      <el-form-item label="targetLanguage">
         <el-select
           v-model="form.targetLanguage"
-          placeholder="输入的语言"
+          placeholder="targetLanguage"
         >
           <el-option
             v-for="item in languageOptions"
@@ -77,7 +77,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="自动发送">
+      <el-form-item label="Auto-send">
         <el-switch
           v-model="form.autoSend"
           size="small"
@@ -85,7 +85,7 @@
           inactive-text="Close"
         />
       </el-form-item>
-      <el-form-item label="对话模式">
+      <el-form-item label="Chat mode">
         <el-select
           v-model="form.questionMode"
           placeholder="Select"
@@ -99,7 +99,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="清理对话后的数据">
+      <el-form-item label="Clear data after chat">
         <el-select
           v-model="form.afterClear"
           placeholder="Select"
@@ -114,7 +114,7 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        label="在光标处写入"
+        label="writeToCursor"
       >
         <el-switch
           v-model="form.writeToCursor"
@@ -124,7 +124,7 @@
           inactive-text="Close"
         />
       </el-form-item>
-      <el-form-item label="自动复制">
+      <el-form-item label="writeToClipboard">
         <el-switch
           v-model="form.writeToClipboard"
           size="small"
@@ -136,12 +136,12 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleClose">取消</el-button>
+        <el-button @click="handleClose">cancel</el-button>
         <el-button
           type="primary"
           @click="submit"
         >
-          提交
+          submit
         </el-button>
       </span>
     </template>
@@ -167,24 +167,25 @@ onMounted(async () => {
   os.value  = await getOs();
 });
 const clear = [{
-    label: '不清理',
-    value: 'none',
+label: 'Do not clear',
+value: 'none',
 }, {
-    label: '清理所有',
-    value: 'both',
+label: 'Clear all',
+value: 'both',
 }, {
-    label: '只清理输入框',
-    value: 'input',
+label: 'Only clear input box',
+value: 'input',
 }, {
-    label: '只清理prompt',
-    value: 'prompt',
+label: 'Only clear prompt',
+value: 'prompt',
 }];
+
 const chatMode = [{
-    label: '问答模式',
-    value: 'ask',
+label: 'Question and answer mode',
+value: 'ask',
 }, {
-    label: '聊天模式',
-    value: 'chat',
+label: 'Chat mode',
+value: 'chat',
 }];
 function keyUp(event: { key: any; ctrlKey: any; altKey: any; shiftKey: any; metaKey: any; keyCode: any; }) {
     const { key, ctrlKey, altKey, shiftKey, metaKey, keyCode } = event;
