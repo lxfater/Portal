@@ -77,7 +77,7 @@ const onContextMenu = (e : MouseEvent) => {
     y: e.y,
     items: [
       { 
-        label: '与当前对话创建连接', 
+        label: 'Make Connection', 
         onClick: () => {
           store.chat.parentHistory = props.item;
           store.question = window.getSelection()!.toString();

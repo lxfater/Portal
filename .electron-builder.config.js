@@ -14,6 +14,9 @@ module.exports = async function () {
   return {
     compression: 'maximum',
     npmRebuild: false,
+    "extraResources": [
+      "./buildResources/**"
+    ],
     win: {
       "requestedExecutionLevel": "requireAdministrator",
       "target": ["nsis"],

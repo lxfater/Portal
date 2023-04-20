@@ -8,27 +8,21 @@ import { router } from './routes';
 import 'highlight.js/styles/github.css';
 import type { Job, Provider } from '../../types';
 //main.js
-import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 
 declare global {
     interface Window {
-        onRenderAsk: (type: Provider, callback: (job: Job) => void) => void;
-        callbackMap: Record<Provider, (job: Job) => void>;
+        onRenderAsk: (callback: (job: Job) => void) => void;
+        aiCallBack: (job: Job) => void;4
+        setRefresh: () => void;
+        reloadWebview: () => void;
     }
 }
-window.callbackMap = {
-    chatgptWeb: (job: Job) => {
-        console.log('chatgptWeb', job);
-    },
-    openAi: (job: Job) => {
-        console.log('openAi', job);
-    },
-    baidu: (job: Job) => {
-        console.log('baidu', job);
-    },
+window.aiCallBack = (job: Job) => {
+    console.log('aiCallBack', job);
 };
-window.onRenderAsk = (type: Provider,callback: (job: Job) => void) => {
-    window.callbackMap[type] = callback;
+window.onRenderAsk = (callback: (job: Job) => void) => {
+    window.aiCallBack = callback;
 };
 
 const app = createApp(App);

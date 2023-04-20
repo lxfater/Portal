@@ -1,7 +1,7 @@
 <template>  
   <el-dialog
     v-model="dialogVisible"
-    :title="`${!isAdd ? '编辑' : '添加'}提示语`"
+    :title="`${!isAdd ? 'Edit' : 'Add'}`"
     width="80%"
     max-height="80%"
 
@@ -13,14 +13,14 @@
       style="max-width: 460px"
       size="small"
     >
-      <el-form-item label="领域">
+      <el-form-item label="Domain">
         <el-select
           v-model="form.scope"
           filterable
           allow-create
           default-first-option
           :reserve-keyword="false"
-          placeholder="选择或者创建领域"
+          placeholder="Select or create domain"
         >
           <el-option
             v-for="item in scopeOption"
@@ -30,14 +30,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="活动">
+      <el-form-item label="Activity">
         <el-select
           v-model="form.activity"
           filterable
           allow-create
           default-first-option
           :reserve-keyword="false"
-          placeholder="选择获取创建活动"
+          placeholder="Select, retrieve, or create an activity"
         >
           <el-option
             v-for="item in activityOption"
@@ -47,44 +47,44 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="标题">
+      <el-form-item label="Title">
         <el-input
           v-model="form.name"
-          placeholder="请输入标题"
+          placeholder="Please enter the title"
         />
       </el-form-item>
-      <el-form-item label="介绍&输入提示">
+      <el-form-item label="Introduction">
         <el-input
           v-model="form.placeholder"
           :rows="2"
           type="textarea"
-          placeholder="输入介绍&输入提示"
+          placeholder="Introduction&Input prompt"
         />
       </el-form-item>
-      <el-form-item label="提示语模板">
+      <el-form-item label="Prompt template">
         <el-input
           v-model="form.template"
           :rows="5"
           type="textarea"
-          placeholder="提示语模板 {{ input }} 代表用户输入的内容, {{ targetLanguage }} 代表输出语言"
+          placeholder="Prompt template {{ input }} represents the user's input, and {{ targetLanguage }} represents the target language."
         />
       </el-form-item>
-      <el-form-item label="快捷短语">
+      <el-form-item label="Quick phrase">
         <el-input
           v-model="form.shortcut"
-          placeholder="用于快速检索"
+          placeholder="Used for quick search"
         />
       </el-form-item>
     </el-form>
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleClose">取消</el-button>
+        <el-button @click="handleClose">Cancel</el-button>
         <el-button
           type="primary"
           @click="submit"
         >
-          提交
+          Edit
         </el-button>
       </span>
     </template>

@@ -1,9 +1,11 @@
 export type MessageTypes = 'ask' | 'answer' ;
-export type JobMode = number
+export type JobMode = 'chat' | 'ask';
 export type Provider = 'chatgptWeb' | 'openAi' | 'baidu';
 export type Message = { 
     message: string;
     done: boolean;
+    pid: string;
+    cid: string;
 }
 export type Job = askJob | answerJob;
 export type answerJob = {
@@ -21,6 +23,8 @@ export type askJob = {
         provider:Provider,
         question: string;
         mode: JobMode;
+        conversationID?: string;
+        parentMessageId?: string;
     }
 }
 export type Prompt = {
@@ -54,15 +58,20 @@ export type Pipeline = {
 export type Prompts = Prompt[]
 export type Settings = {
     connector: {
-      type: 'chatgptWeb' | 'openAi' | 'baidu';
+      type: 'chatgptWeb' | 'openAi' ;
       chatgptWeb: {
         loginUrl: string;
         model: string;
+        autoRefresh: boolean;
+        autoRefreshInterval: number;
+        autoRefreshUrl: string;
+        cloudFlareReload: boolean;
       };
       openAi: {
         apiKey: string;
         model: string;
         maxToken: string;
+        memory: string;
       };
       baidu: {
         apiKey: string;
@@ -124,3 +133,18 @@ export type chatgptMessage = {
     message: string;
   };
 }
+
+export type RefreshSetting = {
+  autoRefresh: boolean;
+  autoRefreshInterval: number;
+}
+
+export type LLMPrams = {
+  type: 'chatgpt' | 'openai',
+  mode: 'ask' | 'chat',
+  question: string;
+  model: string;
+  maxToken?: number;
+  apiKey?: string;
+  id: number; // chat id
+};

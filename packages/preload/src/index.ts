@@ -3,14 +3,11 @@
  */
 
 import { ipcRenderer } from 'electron';
-import type { Chat, Job, Message, Prompt, Provider, Settings } from '../../types';
+import type {  Job, LLMPrams, Message } from '../../types';
 import { Titlebar, TitlebarColor } from 'custom-electron-titlebar';
-export function saveSetting(setting: any) {
-    return ipcRenderer.invoke('saveSetting', setting);
-}
-export function getSetting(): Promise<Settings> {
-    return ipcRenderer.invoke('getSetting');
-}
+export { onMainAskChatgpt, sendToMainChatgpt} from './module/chatgpt';
+export { getSetting, saveSetting, getCascadePrompt, getPromptCount, getActivityList, getChat,getChatsList,getPrompt,getPromptCascades,getPromptList,getScopeList, deleteChat, deletePrompt,addPrompt,updatePrompt, saveChat, saveChatAsMarkdown, importPrompts  } from './module/db';
+
 window.addEventListener('DOMContentLoaded', async () => {
     // Title bar implemenation
     new Titlebar({
@@ -56,32 +53,32 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-const callbackMap = {
-    chatgptWeb: (job: Job) => {
-        console.log('chatgptWeb', job);
-    },
-    openAi: (job: Job) => {
-        console.log('openAi', job);
-    },
-    baidu: (job: Job) => {
-        console.log('baidu', job);
-    },
+
+
+
+
+// llm tunnel
+let callbackMap = (job: Job) => {
+    console.log('chatgptWeb', job);
 };
 ipcRenderer.on('ask', (event, job: Job) => {
-    callbackMap[job.payload.provider](job);
+    callbackMap(job);
 });
-export function onMainAsk(type: Provider,callback: (job: Job) => void) {
-    callbackMap[type] = callback;
+export function onMainAsk(callback: (job: Job) => void) {
+    callbackMap = callback;
 }
-
 export function sendToMain(job: Job) {
     ipcRenderer.invoke('sendToMain', job);
 }
+
+
+
 
 export function saveShortcut() {
     return ipcRenderer.invoke('saveShortcut');
 }
 
+// error info warning success feedback
 const statueCallbackMap = {
     'error': (status: string) => {
         console.log('error', status);
@@ -123,69 +120,7 @@ export function setWindowPosition() {
     return ipcRenderer.invoke('setWindowPosition');
 }
 
-export function getChatsList() {
-    return ipcRenderer.invoke('getChatsList');
-}
 
-export function getChat(chatId: number) {
-    return ipcRenderer.invoke('getChat', chatId);
-}
-
-export function deleteChat(chatId: number) {
-    return ipcRenderer.invoke('deleteChat', chatId);
-}
-
-export function saveChat(chat: Chat) {
-    return ipcRenderer.invoke('saveChat', chat);
-}
-
-export function saveChatAsMarkdown(chat: Chat) {
-    return ipcRenderer.invoke('saveChatAsMarkdown', chat);
-}
-
-
-export function getPromptList(params?:any) {
-    return ipcRenderer.invoke('getPromptList', params);
-}
-export function getPrompt(promptId: number) {
-    return ipcRenderer.invoke('getPrompt', promptId);
-}
-export function updatePrompt(prompt: Prompt) {
-    return ipcRenderer.invoke('updatePrompt', prompt);
-}
-export function deletePrompt(promptId: number) {
-    return ipcRenderer.invoke('deletePrompt', promptId);
-}
-export function addPrompt(prompt: Prompt) {
-    return ipcRenderer.invoke('addPrompt', prompt);
-}
-export function importPrompts() {
-    return ipcRenderer.invoke('importPrompts');
-}
-
-export function exportPrompts() {
-    return ipcRenderer.invoke('exportPrompts');
-}
-
-export function getScopeList() {
-    return ipcRenderer.invoke('getScopeList');
-}
-
-export function getActivityList(scope: string) {
-    return ipcRenderer.invoke('getActivityList', scope);
-}
-
-export function getPromptCascades(type: string) {
-    return ipcRenderer.invoke('getPromptCascades', type);
-}
-
-export function getPromptCount(params:any) {
-    return ipcRenderer.invoke('getPromptCount', params);
-}
-
-export function getCascadePrompt() {
-    return ipcRenderer.invoke('getCascadePrompt');
-}
 
 export function openWebsite(url: string) {
     return ipcRenderer.invoke('openWebsite', url);
@@ -193,4 +128,24 @@ export function openWebsite(url: string) {
 
 export function getOs() {
     return ipcRenderer.invoke('getOs');
+}
+
+export function showNotification(title: string, body: string) {
+    return ipcRenderer.invoke('showNotification', title, body);
+}
+
+export function callLLM(prams: LLMPrams, onMessage:(answer: Message) => void) {
+    return new Promise((resolve) => {
+        ipcRenderer.invoke('callLLM', prams);
+        const handle = (e, message: Message) => {
+            if(message.done) {
+                ipcRenderer.removeListener('answerLLM', handle);
+                onMessage(message);
+                resolve(message);
+            } else {
+                onMessage(message);
+            }
+        };
+        ipcRenderer.on('answerLLM', handle);
+    });
 }

@@ -3,22 +3,22 @@
 
 <template>
   <div class="helpContainer">
-    <h4>快捷指令功能</h4>
-    <p> 第一：你需要在设置/提示语库创建一个提示语模板，并且设置上快捷短语。</p>
-    <p> 第二：你需要在设置/输入方式创建一个快捷调用方式，并且设置上快捷键和快捷指令提示语。</p>
-    <p> 第三：现在你可以选择任何文字，然后按下快捷键，文字将会发送到云端，处理后，根据你的配置写回光标处或者是复制到粘贴板。</p>
-    <h4>对话图谱</h4>
-    <p> 第一：选择你喜欢的提示语，点击聊天，然后开始聊天。</p>
-    <p> 第二：高亮文字，或者直接右键创建链接，即可生成对话图谱。</p>
-    <p> 第三：查看对话图谱，点击节点可以跳到相应对话。</p>
-    <h4>chatgptWeb支持</h4>
-    <p> 第一：切换到chatgptweb方式，阅读使用须知</p>
-    <p> 第二：在设置小齿轮右边会出现一个新按钮，点击登录，即可使用chatgpt接入方式。</p>
-    <p> 第三：假如遇到登录问题，可以点击清理缓存解决。</p>
-    <h4>mac快捷按键权限配置</h4>
-    <p> 辅助功能权限：安全性与隐私-辅助功能,解锁,将本软件Portal添加,假如存在于列表内,需要先移除再添加</p>
-    <p> 屏幕录制权限：屏幕录制权限仅仅用于在光标处写入功能辅助判断当前窗口是否写入,介意权限问题可以不开启，开启方式同上。</p>
-    <p> 其他：假如还解决不了,关于-菜单有联系方式。</p>
+    <h4>Quick command feature</h4>
+    <p>Step 1: You need to create a prompt template in the settings/prompt library and set a shortcut phrase.</p>
+    <p>Step 2: You need to create a shortcut invocation method in the settings/input method and set a shortcut key and prompt for the quick command.</p>
+    <p>Step 3: Now you can select any text, press the shortcut key, the text will be sent to the cloud, processed, and then written back to the cursor position or copied to the clipboard according to your configuration.</p>
+    <h4>Dialogue graph</h4>
+    <p>Step 1: Choose your favorite prompt, click chat, and start chatting.</p>
+    <p>Step 2: Highlight the text or create a link directly by right-clicking to generate a dialogue graph.</p>
+    <p>Step 3: View the dialogue graph, click on the node to jump to the corresponding conversation.</p>
+    <h4>chatgptWeb support</h4>
+    <p>Step 1: Switch to the chatgptweb mode and read the instructions for use.</p>
+    <p>Step 2: A new button will appear to the right of the settings gear icon. Click Login to use the chatgpt access method.</p>
+    <p>Step 3: If you encounter login problems, click Clear cache to resolve the issue.</p>
+    <h4>Mac shortcut key permission settings</h4>
+    <p>Accessibility permissions: Security & Privacy - Accessibility, unlock, add this software Portal, if it already exists in the list, remove it first and then add it again.</p>
+    <p>Screen recording permissions: Screen recording permissions are only used to assist in determining whether the current window is being written at the cursor position. If you are concerned about permissions, you can choose not to enable it. The method for enabling it is the same as above.</p>
+    <p>Others: If you still can't resolve the issue, there is contact information in the About menu.</p>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    :title="`${!isAdd ? '编辑' : '添加'}对话`"
+    :title="`${!isAdd ? 'Edit' : 'Add'}`"
     width="80%"
     max-height="80%"
     :before-close="handleClose"
@@ -12,22 +12,22 @@
       style="max-width: 460px"
       size="small"
     >
-      <el-form-item label="对话名称">
+      <el-form-item label="Conversation name">
         <el-input
           v-model="form.name"
-          placeholder="请输入对话名称"
+          placeholder="Conversation name"
         />
       </el-form-item>
     </el-form>
   
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleClose">取消</el-button>
+        <el-button @click="handleClose">Cancel</el-button>
         <el-button
           type="primary"
           @click="submit"
         >
-          提交
+          submit
         </el-button>
       </span>
     </template>
@@ -47,7 +47,7 @@
         id,
         pid: '',
         cid: '',
-        name: name || `新对话-${id}`,
+        name: name || `New-${id}`,
         next: {},
       };
       saveChat(toRaw(store.chat));

@@ -4,7 +4,7 @@ import { useStore } from '../state';
 import { ElMessage } from 'element-plus';
 import { languageOptions } from '../utils';
 import AddConversation from './AddConversation.vue';
-import { deleteChat, getCascadePrompt, getChat, getChatsList, getPrompt, getPromptCascades, saveChatAsMarkdown } from '#preload';
+import { deleteChat, getCascadePrompt, getChat, getChatsList, getPrompt, getPromptCascades, callChatgptWeb, saveChatAsMarkdown } from '#preload';
 import {
   Download,
   Plus,
@@ -39,6 +39,10 @@ const copy = () => {
   });
 };
 
+const reloadWebview = () => {
+  window.reloadWebview();
+};
+
 const saveAsMarkdown = async () => {
   await saveChatAsMarkdown(toRaw(store.chat));
 };
@@ -46,7 +50,7 @@ const saveAsMarkdown = async () => {
 const onSubmit = () => {
   const type = store.settings.connector.type;
 
-  window.callbackMap[type]({
+  window.aiCallBack({
     type: 'ask',
     payload: {
       provider: type,
@@ -55,13 +59,17 @@ const onSubmit = () => {
     },
   });
 
-  goDown();
+  // goDown();
 
 };
-
-const onChat = () => {
-  const type = store.settings.connector.type;
-  window.callbackMap[type]({
+const onKeyDown = (event) => {
+  if (event.ctrlKey && event.key === 'Enter') {
+    onChat();
+  }
+};
+const onChat = async () => {
+  const type = 'openAi';
+  window.aiCallBack({
     type: 'ask',
     payload: {
       provider: type,
@@ -70,6 +78,7 @@ const onChat = () => {
     },
   });
   goDown();
+  // await callChatgptWeb();
 };
 
 const goDown = () => {
@@ -82,7 +91,7 @@ let chatList = ref<ChatItem[]>([]);
 const refresh = async () => {
   const list = await getChatsList();
   // sort list by id
-  list.sort((a, b) => b.id - a.id);
+  list.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
   chatList.value = list;
 };
 const openChatList = async () => {
@@ -202,7 +211,7 @@ const clearChat = async (id: number) => {
           v-model="store.currentPromptPath"
           size="small"
           style="width: 150px;"
-          placeholder="筛选你的提示语"
+          placeholder="Filter your prompts"
           :options="cascadePrompt"
           filterable
           clearable
@@ -228,7 +237,7 @@ const clearChat = async (id: number) => {
         </el-cascader>
         <el-select
           v-model="store.settings.targetLanguage"
-          placeholder="选择目标语言，默认中文"
+          placeholder="Select target language, default is English"
           style="width: 100px;"
           size="small"
         >
@@ -248,7 +257,7 @@ const clearChat = async (id: number) => {
               store.chat.parentHistory = null
             }"
           >
-            取消关联
+            clear Connection
           </el-button>
         </div>
         <div>
@@ -257,14 +266,14 @@ const clearChat = async (id: number) => {
             type="primary"
             @click="openChatList"
           >
-            对话列表
+            list
           </el-button>
           <el-button
             size="small"
             type="primary"
             @click="onChat"
           >
-            聊天
+            chat
           </el-button>
         </div>
       </div>
@@ -274,20 +283,38 @@ const clearChat = async (id: number) => {
         show-word-limit
         :rows="5"
         type="textarea"
-        :placeholder="store.currentPrompt?.placeholder || '请输入你的问题'"
+        :placeholder="store.currentPrompt?.placeholder || 'Please input your question'"
+        @keydown="onKeyDown"
       />
     </div>
     <div class="card">
       <div class="bar">
         <div class="title">{{ store.chat && store.chat.name }}</div>
         <div class="action">
-          <el-icon size="25">
-            <Compass @click="toggle" />
-          </el-icon>
-    
-          <el-icon size="25">
-            <Download @click="saveAsMarkdown" />
-          </el-icon>
+          <el-tooltip
+            content="Reload when thing goes wrong"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Refresh @click="reloadWebview" />
+            </el-icon>
+          </el-tooltip>
+          <el-tooltip
+            content="Map"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Compass @click="toggle" />
+            </el-icon>
+          </el-tooltip>
+          <el-tooltip
+            content="saveAsMarkdown"
+            placement="top"
+          >
+            <el-icon size="25">
+              <Download @click="saveAsMarkdown" />
+            </el-icon>
+          </el-tooltip>
         </div>
       </div>
       <div
