@@ -33,7 +33,14 @@ module.exports = async function () {
     extraMetadata: {
       version: getVersion(),
     },
-
+    'publish': [
+      {
+        'provider': 'github',
+        'owner': 'lxfater',
+        'repo': 'Portal',
+        'releaseType': 'draft',
+      },
+    ],
     // Specify linux target just for disabling snap compilation
     linux: {
       target: 'deb',
