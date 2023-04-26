@@ -9,7 +9,7 @@ export { onMainAskChatgpt, sendToMainChatgpt} from './module/chatgpt';
 export { getSetting, saveSetting, getCascadePrompt, getPromptCount, getActivityList, getChat,getChatsList,getPrompt,getPromptCascades,getPromptList,getScopeList, deleteChat, deletePrompt,addPrompt,updatePrompt, saveChat, saveChatAsMarkdown, importPrompts  } from './module/db';
 
 window.addEventListener('DOMContentLoaded', async () => {
-    // Title bar implemenation
+    // Title bar implementation
     new Titlebar({
         backgroundColor: TitlebarColor.fromHex('#409eff'),
         minimizable: true,
